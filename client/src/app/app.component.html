@@ -1,0 +1,52 @@
+<h1>Video Recorder</h1>
+
+<!-- Resolution Selection -->
+<div>
+  <label>Select Resolution:</label>
+  <label *ngFor="let res of resolutions">
+    <input
+      type="radio"
+      name="resolution"
+      [value]="res"
+      [(ngModel)]="selectedResolution"
+      (change)="onResolutionChange()"
+    />
+    {{ res.label }}
+  </label>
+</div>
+
+<div>
+  <button (click)="startRecording()" [disabled]="(recordingState$ | async) !== 'inactive'">Start Recording</button>
+  <button (click)="pauseRecording()" [disabled]="(recordingState$ | async) !== 'recording'">Pause Recording</button>
+  <button (click)="resumeRecording()" [disabled]="(recordingState$ | async) !== 'paused'">Resume Recording</button>
+  <button (click)="stopRecording()" [disabled]="(recordingState$ | async) === 'inactive'">Stop Recording</button>
+  <button (click)="startScreenShare()">Start Screen Share & Record</button>
+  <button (click)="switchToCamera()">Start/Reset Camera & Record</button>
+</div>
+
+<p>MIME: {{ mimeType$ | async }}</p>
+<p>Recent Blob Size: {{ recentBlobSize$ | async }} bytes</p>
+<p>Recording State: {{ recordingState$ | async }}</p>
+<p>IOS: {{ isIOS() }}</p>
+
+<div class="container">
+  <div class="video-wrapper">
+    <video #videoElement class="video-responsive" autoplay playsinline muted></video>
+  </div>
+</div>
+
+<div>
+  <h3>Recorded Segments:</h3>
+  <ul>
+    <li *ngFor="let segment of recordingSegments; let i = index">
+      <p>
+        Segment {{ i + 1 }} ({{ segment.type }}): {{ getSegmentSize(segment) }} bytes, Blobs:
+        {{ segment.blobs.length }}
+      </p>
+      <video [src]="segment.url" controls></video>
+      <button (click)="downloadSegment(segment)">Download Segment</button>
+    </li>
+  </ul>
+</div>
+
+<router-outlet></router-outlet>
