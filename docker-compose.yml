@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./ng-local-record
+      dockerfile: Dockerfile
+    volumes:
+      - app-build:/app/dist
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "${NGINX_HTTP_PORT:-80}:80"
+      - "${NGINX_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - app-build:/usr/share/nginx/html
+    depends_on:
+      - frontend
+    # Bad bad bad!
+    command: >
+      /bin/sh -c "
+      chmod -R 755 /usr/share/nginx/html &&
+      nginx -g 'daemon off;'"
+
+volumes:
+  app-build:

@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "serve:client": "cd ng-local-record && ng serve",
+    "build:client": "cd ng-local-record && ng build --configuration production",
+    "build:client:prod": "docker-compose down -v && docker-compose up -d --build"
+  }
+}
