@@ -1,6 +1,6 @@
 # ng-recording
 
-Build Client Locally: `npm run client:serve`
+Build Client Locally: `cd client` -> `npm install` -> `npm run serve`
 
 MediaRecorder implementation supported on all major browsers + mobile
 
