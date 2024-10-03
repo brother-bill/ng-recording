@@ -173,10 +173,11 @@ export class AppComponent implements OnInit, OnDestroy {
     try {
       const stream = await this.getMediaStream('screen');
       this.stream$.next(stream);
-      this.startRecording();
 
       const screenTrack = stream.getVideoTracks()[0];
       screenTrack.onended = () => this.ngZone.run(()=> this.switchToCamera());
+
+      this.startRecording();
     } catch (error) {
       this.handleError('Error accessing screen: ' + error);
     }
@@ -189,7 +190,11 @@ export class AppComponent implements OnInit, OnDestroy {
     try {
       const stream = await this.getMediaStream('camera');
       this.stream$.next(stream);
-      this.startRecording();
+
+      // Only start recording if we were previously recording
+      if (this.recordingState$.getValue() !== 'inactive') {
+        this.startRecording();
+      }
     } catch (error) {
       this.handleError('Error switching to camera: ' + error);
     }
