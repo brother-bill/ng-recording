@@ -21,7 +21,7 @@
   <button (click)="resumeRecording()" [disabled]="(recordingState$ | async) !== 'paused'">Resume Recording</button>
   <button (click)="stopRecording()" [disabled]="(recordingState$ | async) === 'inactive'">Stop Recording</button>
   <button (click)="startScreenShare()">Start Screen Share & Record</button>
-  <button (click)="switchToCamera()">Start/Reset Camera & Record</button>
+  <button (click)="switchToCamera()">Start Camera & Record</button>
 </div>
 
 <p>MIME: {{ mimeType$ | async }}</p>
